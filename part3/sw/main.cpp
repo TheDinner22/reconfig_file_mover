@@ -57,8 +57,34 @@ int main(int argc, char *argv[]) {
     exit(-1);
   }
 
+  
+  unsigned int zero = 0;
+  unsigned int one = 1;
+  
   // TODO: Create a loop that tests the software and hardware `is_perfect_square`
   for (unsigned i = 0; i < 50; i++) {
+    // set n to i
+    board->write(&i, N_ADDR, 1);
+    
+    // go = 1
+    board->write(&one, GO_ADDR, 1);
+    
+    // go = 0
+    board->write(&zero, GO_ADDR, 1);
+    
+    // wait for done
+    board->waitUntilNotZero(DONE_ADDR, 2.0);
+
+    
+    // read the output
+    unsigned int hw_data;
+    board->read(&hw_data, OUTPUT_ADDR, 1);
+
+    // sw output
+    unsigned int sw_data = is_perfect_square(i);
+    
+    // print the result hw and sw
+    cout << i << ": HW = " <<  hw_data << ", SW = " << sw_data << endl;
 
     // Use the output format specified in the lab instructions.
     //
